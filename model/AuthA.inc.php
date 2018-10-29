@@ -12,16 +12,16 @@ abstract class AuthA implements AuthI {
     protected static $sessvar = 'nAuth42'; // if set = logged on
     protected static $logInstance = false;
     protected $userId;
-    
+
     protected function __construct($user) {
         $this->userId = $user;
     }
-    
-    
+
+
     public function getUserId() {
         return $this->userId;
     }
-    
+
     public static function getLoginId() {
         return isset($_SESSION[self::$sessvar]) ? $_SESSION[self::$sessvar] : 'nobody';
     }
@@ -29,7 +29,7 @@ abstract class AuthA implements AuthI {
     public static function isAuthenticated() {
       return isset($_SESSION[self::$sessvar]) ? true : false;
     }
-    
+
     public static function logout() {
         setcookie(session_name(), '', 0, '/');
         session_unset();

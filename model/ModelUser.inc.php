@@ -45,43 +45,43 @@ class User extends Model {
         $dbh->query('commit');
     }
 
-  // public function update($id, $attr, $newValue) {
-  //   $sql = sprintf("update user
-  //                   set %s = :pwd
-  //                   where uid = '%s';"
-  //                             , $attr
-  //                             , $id);
-  //
-  //   $dbh = Model::connect();
-  //   try {
-  //       $q = $dbh->prepare($sql);
-  //       // $q->bindValue(':pwd', password_hash($newValue, PASSWORD_DEFAULT));
-  //       $q->bindValue(':pwd', $newValue);
-  //       $q->execute();
-  //   } catch(PDOException $e) {
-  //       printf("<p>Update of user failed: <br/>%s</p>\n",
-  //           $e->getMessage());
-  //   }
-  //   $dbh->query('commit');
-  // }
-    //
-    // public static function ActivateUser($uid, $changeTo) {
-    //   $sql = sprintf("update user
-    //                   set activated = '%s'
-    //                   where uid = '%s';"
-    //                             , $changeTo
-    //                             , $uid);
-    //
-    //   $dbh = Model::connect();
-    //   try {
-    //       $q = $dbh->prepare($sql);
-    //       $q->execute();
-    //   } catch(PDOException $e) {
-    //       printf("<p>Insert of user failed: <br/>%s</p>\n",
-    //           $e->getMessage());
-    //   }
-    //   $dbh->query('commit');
-    // }
+  public function update($id, $attr, $newValue) {
+    $sql = sprintf("update user
+                    set %s = :pwd
+                    where uid = '%s';"
+                              , $attr
+                              , $id);
+
+    $dbh = Model::connect();
+    try {
+        $q = $dbh->prepare($sql);
+        $q->bindValue(':pwd', password_hash($newValue, PASSWORD_DEFAULT));
+        $q->bindValue(':pwd', $newValue);
+        $q->execute();
+    } catch(PDOException $e) {
+        printf("<p>Update of user failed: <br/>%s</p>\n",
+            $e->getMessage());
+    }
+    $dbh->query('commit');
+  }
+
+    public static function ActivateUser($uid, $changeTo) {
+      $sql = sprintf("update user
+                      set activated = '%s'
+                      where uid = '%s';"
+                                , $changeTo
+                                , $uid);
+
+      $dbh = Model::connect();
+      try {
+          $q = $dbh->prepare($sql);
+          $q->execute();
+      } catch(PDOException $e) {
+          printf("<p>Insert of user failed: <br/>%s</p>\n",
+              $e->getMessage());
+      }
+      $dbh->query('commit');
+    }
 
   public function delete($id) {
     $sql = sprintf("delete from user

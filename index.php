@@ -7,9 +7,13 @@
  * @license http://www.fsf.org/licensing/ GPLv3
  */
     session_start();
-    require_once './model/ModelUser.inc.php'; // domainmodel
+    // Model
+    require_once './model/ModelA.inc.php';
+    require_once './model/ModelUser.inc.php';
+    // View
     require_once './view/ViewUser.inc.php';
     require_once './view/ViewLogin.inc.php';
+    //Controll
     require_once './controller/Controller.inc.php';
 
     $controller = new Controller($_GET);

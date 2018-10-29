@@ -20,7 +20,8 @@ class Authentication extends AuthA {
         catch (Exception $e) {
             self::$logInstance = FALSE;
             unset($_SESSION[self::$sessvar]);                   //miserys
-        }      
+            print "error";                                      //move to a view
+        }
     }
 
     public static function authenticate($user, $pwd) {
@@ -32,18 +33,22 @@ class Authentication extends AuthA {
 
     protected static function dbLookUp($user, $pwdtry) {
         // Using prepared statement to prevent SQL injection
-        $sql = "select uid, password 
+        $sql = "select uid, password
                 from user
                 where uid = :uid
                 and activated = true;";
+
         $dbh = Model::connect();
         try {
             $q = $dbh->prepare($sql);
             $q->bindValue(':uid', $user);
             $q->execute();
             $row = $q->fetch();
+
+            var_dump($row); // DEBUGGING
+
             if (!($row['uid'] === $user
-                    && password_verify($pwdtry, $row['password']))) { 
+                    && password_verify($pwdtry, $row['password']))) {
                  throw new Exception("Not authenticated", 42);   //misery
             }
         } catch(PDOException $e) {

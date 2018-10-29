@@ -10,6 +10,6 @@ abstract class DbP {
     const DBHOST = 'localhost';
     const DBUSER = 'root';
     const USERPWD = '';
-    const DB = '';
+    const DB = 'worldsample';
     const DSN = "mysql:host=".self::DBHOST.";dbname=".self::DB;
 }

@@ -71,3 +71,48 @@ insert into city(district, name, population, contrycode)
   insert into contrylanguage(contrycode, language, isofficial, percantage)
     values('DK', 'Dansk', true, '85'),
           ('EN', 'Engelsk', true, '10');
+
+
+-- NEW
+DROP DATABASE IF EXISTS yaddax3;
+
+CREATE DATABASE yaddax3;
+USE yaddax3;
+
+create table user (
+    firstname varchar(32) not null,
+    lastname varchar(32) not null,
+    email varchar(64) not null,
+    uid varchar(16) not null,
+    password blob not null,
+    activated boolean default false,
+    unique(email),
+    primary key(uid)
+);
+
+create table listensto (
+            uida varchar(16) not null,
+            uidb varchar(16) not null,
+            primary key(uida, uidb)
+);
+
+create table image (
+            id int not null auto_increment,
+            img blob not null,
+            primary key(id)
+);
+
+create table yadda (
+            dateintime datetime not null default current_timestamp,
+            uid varchar(16) not null,
+            content varchar(167) not null,
+            primary key(uid, dateintime)
+);
+
+create table yaddarelation (
+            uida varchar(16) not null,
+            uidb varchar(16) not null,
+            datetimea varchar(16) not null,
+            datetimeb varchar(16) not null,
+            primary key(uida, uidb)
+);

@@ -112,7 +112,7 @@ create table yadda (
 create table yaddarelation (
             uida varchar(16) not null,
             uidb varchar(16) not null,
-            datetimea varchar(16) not null,
-            datetimeb varchar(16) not null,
+            datetimea varchar(32) not null,
+            datetimeb varchar(32) not null,
             primary key(uida, uidb)
 );

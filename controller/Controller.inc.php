@@ -60,7 +60,15 @@ class Controller {
                 }
                 $view1->display();
                 break;
-            }
+             case 'Yadda':   //lang create
+                $this->model = new Yadda(null, null, null); // init a model
+                $view1 = new YaddaView($this->model);                     // init a view
+                if (isset($_POST)) {
+                    $this->createYadda($_POST);                  // activate controller
+                }
+                $view1->display();
+                break;
+        }
     }
 
     public function auth($p) {
@@ -71,6 +79,14 @@ class Controller {
                     && isset($p['pwd'])) {
                         Authentication::authenticate($p['uid'], $p['pwd']);
             }
+            $p = array();
+        }
+    }
+
+    public function createYadda($p) {
+        if (isset($p) && count($p) > 0) {
+            $yaddas = Yadda::createYaddaObject($p);  // object from array
+            $yaddas->createYadda();         // model method to insert into db
             $p = array();
         }
     }

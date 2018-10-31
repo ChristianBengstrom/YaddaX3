@@ -16,11 +16,11 @@ class User extends Model {
     private $activated;
 
 
-    public function __construct($uid, $firstname, $lastname, $email, $activated) {
+    public function __construct($uid, $activated) {
         $this->uid = $uid;
-        $this->firstname = $firstname;
-        $this->lastname = $lastname;
-        $this->email = $email;
+        // $this->firstname = $firstname;
+        // $this->lastname = $lastname;
+        // $this->email = $email;
         $this->activated = $activated;
     }
 
@@ -154,7 +154,7 @@ class User extends Model {
     }
 
     public static function createObjectID($a) {
-      $user = new User($_POST['uid']);
+      $user = new User($_POST['uid'], null);
 
       return $user;
 }

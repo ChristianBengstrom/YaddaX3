@@ -23,7 +23,7 @@ class Controller {
     public function doSomething() {
         switch ($this->function) {
             case 'A':   //auth
-                $this->model = new User(null, null, null, null, null, null, null);
+                $this->model = new User(null, null);
                 $view1 = new LoginView($this->model);
                 if (isset($_POST)) {
                     $this->auth($_POST);
@@ -31,13 +31,13 @@ class Controller {
                 $view1->display();
                 break;
             case 'Z':   //logout
-                $this->model = new User(null, null, null, null, null, null, null);
+                $this->model = new User(null, null);
                 $view1 = new LoginView($this->model);
                 $this->logout();
                 $view1->display();
                 break;
             case 'U':   //user create
-                $this->model = new User(null, null, null, null, null, null, null); // init a model
+                $this->model = new User(null, null); // init a model
                 $view1 = new UserView($this->model);                  // init a view
                 if (isset($_POST['activateGo'])) {
                   $this->makeUserActive();
@@ -49,7 +49,7 @@ class Controller {
                 $view1->display();
                 break;
             case 'T':   //user create
-                $this->model = new User(null, null, null, null, null, null, null); // init a model
+                $this->model = new User(null, null); // init a model
                 $view1 = new UserUpdateView(null, null);                           // init a view
                 if (isset($_POST['createGo'])) {
                     $this->createUser($_POST);                                     // activate controller
@@ -166,7 +166,7 @@ class Controller {
             }
     }
     public function deleteUser($p) {
-        $user = User::createObject($p);
+        $user = User::createObjectID($p);
         $user->delete();
         // $id = $_POST['id'];
         // User::delete();

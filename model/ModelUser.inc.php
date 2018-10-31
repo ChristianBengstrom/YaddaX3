@@ -9,11 +9,18 @@
 class User extends Model {
     private $uid;       // string
     private $password;  // string ll=128
-    private $activated;
+    private $firstname;
+    private $lastname;
+    private $email;
     private $pwd;
+    private $activated;
 
-    public function __construct($uid, $activated) {
+
+    public function __construct($uid, $firstname, $lastname, $email, $activated) {
         $this->uid = $uid;
+        $this->firstname = $firstname;
+        $this->lastname = $lastname;
+        $this->email = $email;
         $this->activated = $activated;
     }
 
@@ -27,28 +34,50 @@ class User extends Model {
     public function getUid() {
         return $this->uid;
     }
+    public function getFirstName() {
+        return $this->firstname;
+    }
+    public function getLastName() {
+        return $this->lastname;
+    }
+    public function getEmail() {
+        return $this->email;
+    }
 
     public function create() {
-        $sql = "insert into user (uid, password)
-                        values (:uid, :pwd)";
+        $sql = "insert into user (id, password, firstname, lastname, email)
+                         values (:uid, :pwd, :firstname, :lastname, :email)";
 
         $dbh = Model::connect();
+        // $dbh->beginTransaction();
         try {
             $q = $dbh->prepare($sql);
             $q->bindValue(':uid', $this->getUid());
             $q->bindValue(':pwd', password_hash($this->getPwd(), PASSWORD_DEFAULT));
+            $q->bindValue(':firstname', $this->getFirstname());
+            $q->bindValue(':lastname', $this->getLastname());
+            $q->bindValue(':email', $this->getEmail());
             $q->execute();
+
+            $actionAtrr = 'profile';
+            $action = 'created';
+            $f = array (
+              'actionAtrr' => $actionAtrr,
+              'action' => $action);
+            $view1 = UserUpdateView::createObject($f);
+            // $dbh->query('commit');
         } catch(PDOException $e) {
             printf("<p>Insert of user failed: <br/>%s</p>\n",
                 $e->getMessage());
+                // $dbh->rollBack();
         }
-        $dbh->query('commit');
+
     }
 
   public function update($id, $attr, $newValue) {
     $sql = sprintf("update user
                     set %s = :pwd
-                    where uid = '%s';"
+                    where id = '%s';"
                               , $attr
                               , $id);
 
@@ -68,7 +97,7 @@ class User extends Model {
     public static function ActivateUser($uid, $changeTo) {
       $sql = sprintf("update user
                       set activated = '%s'
-                      where uid = '%s';"
+                      where id = '%s';"
                                 , $changeTo
                                 , $uid);
 
@@ -83,10 +112,10 @@ class User extends Model {
       $dbh->query('commit');
     }
 
-  public function delete($id) {
+  public function delete() {
     $sql = sprintf("delete from user
-                    where uid = '%s';"
-                              , $id);
+                    where id = '%s';"
+                              , $this->getUid());
 
     $dbh = Model::connect();
     try {
@@ -124,13 +153,18 @@ class User extends Model {
         }
     }
 
-        public static function createObject($a) {
-          $act = isset($a['activated'])? $a['activated'] : null;
-          $user = new User($a['uid'], $act);
-          if (isset($a['pwd1'])) {
-              $user->setPwd($a['pwd1']);
-          }
-          return $user;
-    }
+    public static function createObjectID($a) {
+      $user = new User($_POST['uid']);
 
+      return $user;
+}
+
+      public static function createObject($a) {
+        $act = isset($a['activated'])? $a['activated'] : null;
+        $user = new User($_POST['uid'], $_POST['fname'], $_POST['lname'], $_POST['email'], $act);
+        if (isset($a['pwd1'])) {
+            $user->setPwd($a['pwd1']);
+        }
+        return $user;
   }
+}

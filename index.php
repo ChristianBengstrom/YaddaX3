@@ -13,6 +13,7 @@
     // View
     require_once './view/ViewUser.inc.php';
     require_once './view/ViewLogin.inc.php';
+    require_once './view/ViewUserUpdated.inc.php';
     //Controll
     require_once './controller/Controller.inc.php';
 

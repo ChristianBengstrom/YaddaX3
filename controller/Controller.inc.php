@@ -23,7 +23,7 @@ class Controller {
     public function doSomething() {
         switch ($this->function) {
             case 'A':   //auth
-                $this->model = new User(null, null);
+                $this->model = new User(null, null, null, null, null, null, null);
                 $view1 = new LoginView($this->model);
                 if (isset($_POST)) {
                     $this->auth($_POST);
@@ -31,62 +31,36 @@ class Controller {
                 $view1->display();
                 break;
             case 'Z':   //logout
-                $this->model = new User(null, null);
+                $this->model = new User(null, null, null, null, null, null, null);
                 $view1 = new LoginView($this->model);
                 $this->logout();
                 $view1->display();
                 break;
-            // case 'C':   //city create
-            //     $this->model = new City('DNK', null, null, null, null);    // init a model
-            //     $view1 = new CityView($this->model);                       // init view
-            //     if (isset($_POST['editGo'])) {
-            //         $this->createCity($_POST);                             // activate controller
-            //     }elseif (isset($_POST['updateGo'])) {
-            //       $this->updateCity($_POST);
-            //     }elseif (isset($_POST['deleteGo'])) {
-            //       $this->deleteCity($_POST);
-            //     }
-            //     $view1->display();
-            //     break;
-            // case 'L':   //lang create
-            //     $this->model = new CountryLanguage('DNK', null, null, null); // init a model
-            //     $view1 = new LanguageView($this->model);                     // init a view
-            //     if (isset($_POST['createGo'])) {
-            //         $this->createLanguage($_POST);                           // activate controller
-            //     } elseif (isset($_POST['updateGo'])) {
-            //         $this->updateLanguage($_POST);
-            //     } elseif (isset($_POST['deleteGo'])) {
-            //         $this->deleteLanguage($_POST);
-            //     }
-            //     $view1->display();
-            //     break;
             case 'U':   //user create
-                $this->model = new User(null, null); // init a model
+                $this->model = new User(null, null, null, null, null, null, null); // init a model
                 $view1 = new UserView($this->model);                  // init a view
-                if (isset($_POST['createGo'])) {
-                    $this->createUser($_POST);                        // activate controller
-                } elseif (isset($_POST['activateGo'])) {
+                if (isset($_POST['activateGo'])) {
                   $this->makeUserActive();
                 } elseif (isset($_POST['changeGo'])) {
                   $this->changeUserPwd();
-                } elseif (isset($_POST['deleteGo'])) {
-                  $this->deleteUser();
+                } elseif (isset($_POST['AdminDeleteGo'])) {
+                  $this->AdminDeleteUser();
                 }
                 $view1->display();
                 break;
-                //   case 'Co':  //country create
-                //   $this->model = new Country('DNK', null, null, null, null);   // init a model
-                //   $view1 = new CountryView($this->model);                      // init view
-                //   if (isset($_POST['createGo'])) {
-                //       $this->createCountry($_POST);                            // activate controller
-                //   } elseif (isset($_POST['updateGo'])) {
-                //     $this->updateCountry($_POST);
-                //   } elseif (isset($_POST['deleteGo'])) {
-                //     $this->deleteCountry($_POST);
-                //   }
-                //   $view1->display();
-                // break;
-                case 'Yadda':   //lang create
+            case 'T':   //user create
+                $this->model = new User(null, null, null, null, null, null, null); // init a model
+                $view1 = new UserUpdateView(null, null);                           // init a view
+                if (isset($_POST['createGo'])) {
+                    $this->createUser($_POST);                                     // activate controller
+                } elseif (isset($_POST['changeGo'])) {
+                  $this->changeUserPwd();
+                } elseif (isset($_POST['deleteGo'])) {
+                  $this->deleteUser($_POST);
+                }
+                $view1->display();
+                break;
+             case 'Yadda':   //lang create
                 $this->model = new Yadda(null, null, null); // init a model
                 $view1 = new YaddaView($this->model);                     // init a view
                 if (isset($_POST)) {
@@ -187,6 +161,7 @@ class Controller {
         if (isset($p) && count($p) > 0) {
             $user = User::createObject($p);  // object from array
             $user->create();         // model method to insert into db
+
             $p = array();
         }
     }
@@ -206,9 +181,11 @@ class Controller {
             //
             }
     }
-    public function deleteUser() {
-        $id = $_POST['id'];
-        User::delete($id);
+    public function deleteUser($p) {
+        $user = User::createObject($p);
+        $user->delete();
+        // $id = $_POST['id'];
+        // User::delete();
     }
 
     public function logout() {

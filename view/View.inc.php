@@ -45,11 +45,12 @@ abstract class View {
         if (Authentication::isAuthenticated()) {
             $s .= sprintf("                <li><a href='%s?function=Co'>Country</a></li>\n
                                            <li><a href='%s?function=C'>Cities</a></li>\n
-                                           <li><a href='%s?function=L'>Languages</a></li>\n",
-                $_SERVER['PHP_SELF'], $_SERVER['PHP_SELF'], $_SERVER['PHP_SELF']);
+                                           <li><a href='%s?function=L'>Languages</a></li>\n
+                                           <li><a href='%s?function=Yadda'>Yadda</a></li>\n",
+                $_SERVER['PHP_SELF'], $_SERVER['PHP_SELF'], $_SERVER['PHP_SELF'], $_SERVER['PHP_SELF']);
         } else {
             $s .= sprintf("                <li><a href='%s?function=U'>Register User</a></li>\n",
-                $_SERVER['PHP_SELF']);
+                $_SERVER['PHP_SELF'], $_SERVER['PHP_SELF']) ;
         }
         if (!Authentication::isAuthenticated()) {
             $s .= sprintf("                <li><a href='%s?function=A'>Login</a></li>\n"

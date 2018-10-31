@@ -25,37 +25,37 @@ class UserView extends View {
         return $s;
     }
 
-    private function userForm() {
-        $s = sprintf("
-            <form action='%s?function=U' method='post'>\n
-            <div class='gets'>\n
-                <h3>Create User</h3>\n
-                <p>\n
-                    Userid:<br/>
-                    <input type='text' name='uid'/>\n
-                </p>\n
-                <p>\n
-                    Pwd:<br/>
-                    <input type='password' name='pwd1'/>\n
-                </p>\n
-                 <p>\n
-                    Pwd repeat:<br/>
-                    <input type='password' name='pwd2'/>\n
-                </p>\n
-                <p>\n
-                    <input type='submit' name='createGo' value='createGo'/>
-                </p>
-            </div>", $_SERVER['PHP_SELF']);
-
-        if (!Model::areCookiesEnabled()) {
-            $s .= "<tr><td colspan='2' class='err'>Cookies
-            from this domain must be
-                      enabled before attempting login.</td></tr>";
-        }
-        $s .= "          </div>\n";
-        $s .= "          </form>\n";
-        return $s;
-    }
+    // private function userForm() {
+    //     $s = sprintf("
+    //         <form action='%s?function=U' method='post'>\n
+    //         <div class='gets'>\n
+    //             <h3>Create User</h3>\n
+    //             <p>\n
+    //                 Userid:<br/>
+    //                 <input type='text' name='uid'/>\n
+    //             </p>\n
+    //             <p>\n
+    //                 Pwd:<br/>
+    //                 <input type='password' name='pwd1'/>\n
+    //             </p>\n
+    //              <p>\n
+    //                 Pwd repeat:<br/>
+    //                 <input type='password' name='pwd2'/>\n
+    //             </p>\n
+    //             <p>\n
+    //                 <input type='submit' name='createGo' value='createGo'/>
+    //             </p>
+    //         </div>", $_SERVER['PHP_SELF']);
+    //
+    //     if (!Model::areCookiesEnabled()) {
+    //         $s .= "<tr><td colspan='2' class='err'>Cookies
+    //         from this domain must be
+    //                   enabled before attempting login.</td></tr>";
+    //     }
+    //     $s .= "          </div>\n";
+    //     $s .= "          </form>\n";
+    //     return $s;
+    // }
     private function activateUserForm() {
         $s = sprintf(" <form action='%s?function=U' method='post'>\n
                           <div class='gets'>\n"
@@ -139,9 +139,8 @@ class UserView extends View {
         return $s;
     }
     private function displayUser() {
-        $s = sprintf("<main class='main'>\n%s\n%s\n%s\n%s\n%s</main>\n"
+        $s = sprintf("<main class='main'>\n%s\n%s\n%s\n%s</main>\n"
                     , $this->displayul()
-                    , $this->userForm()
                     , $this->changePwdForm()
                     , $this->activateUserForm()
                     , $this->deleteUserForm());

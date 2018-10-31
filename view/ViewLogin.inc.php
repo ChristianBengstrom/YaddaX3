@@ -46,16 +46,60 @@ class LoginView extends View {
         return $s;
     }
 
-    private function displayLogin() {
-        $s = "        <main class='main'>\n";
-        if (!Authentication::isAuthenticated()) {
-            $s .= $this->loginForm();
+    private function registerForm() {                                           // forDEBUG http://x15.dk/hitme.php
+        $s = sprintf("
+            <form action='%s?function=U' method='post'>\n
+            <div class='gets'>\n
+                <h3>Create User</h3>\n
+                <p>\n
+                    Usename:<br/>
+                    <input type='text' name='uid'/>\n
+                </p>\n
+                <p>\n
+                    Firstname:<br/>
+                    <input type='text' name='fname'/>\n
+                </p>\n
+                <p>\n
+                    Lastname:<br/>
+                    <input type='text' name='lname'/>\n
+                </p>\n
+                <p>\n
+                    Email:<br/>
+                    <input type='text' name='email'/>\n
+                </p>\n
+                <p>\n
+                    Pwd:<br/>
+                    <input type='password' name='pwd1'/>\n
+                </p>\n
+                 <p>\n
+                    Pwd repeat:<br/>
+                    <input type='password' name='pwd2'/>\n
+                </p>\n
+                <p>\n
+                    <input type='submit' name='createGo' value='createGo'/>
+                </p>
+            </div>", $_SERVER['PHP_SELF']);
+
+        if (!Model::areCookiesEnabled()) {                                      // Repeated!! change to a function.
+            $s .= "<tr><td colspan='2' class='err'>Cookies
+            from this domain must be
+                      enabled before attempting login.</td></tr>";
         }
-        $s .= "        </main>\n";
+        $s .= "          </div>\n";
+        $s .= "          </form>\n";
         return $s;
     }
 
+    private function displayForms() {
+      if (!Authentication::isAuthenticated()) {
+        $s = sprintf("<main class='main'>\n%s\n%s</main>\n"
+                    , $this->loginForm()
+                    , $this->registerForm());
+        return $s;
+      }
+    }
+
     public function display(){
-       $this->output($this->displayLogin());
+       $this->output($this->displayForms());
     }
 }

@@ -14,13 +14,13 @@ class Authentication extends AuthA {
     protected function __construct($user, $pwd) {
         parent::__construct($user);
         try {
-            self::dbLookUp($user, $pwd);                        // invoke auth
-            $_SESSION[self::$sessvar] = $this->getUserId();     // succes
+            self::dbLookUp($user, $pwd);                                        // invoke auth
+            $_SESSION[self::$sessvar] = $this->getUserId();                     // succes
         }
         catch (Exception $e) {
             self::$logInstance = FALSE;
-            unset($_SESSION[self::$sessvar]);                   //miserys
-            print "error";                                      //move to a view
+            unset($_SESSION[self::$sessvar]);                                   //miserys
+            print "error";                                                      //move to a view
         }
     }
 
@@ -33,9 +33,9 @@ class Authentication extends AuthA {
 
     protected static function dbLookUp($user, $pwdtry) {
         // Using prepared statement to prevent SQL injection
-        $sql = "select uid, password
+        $sql = "select id, password
                 from user
-                where uid = :uid
+                where id = :uid
                 and activated = true;";
 
         $dbh = Model::connect();
@@ -45,11 +45,9 @@ class Authentication extends AuthA {
             $q->execute();
             $row = $q->fetch();
 
-            var_dump($row); // DEBUGGING
-
             if (!($row['uid'] === $user
-                    && password_verify($pwdtry, $row['password']))) {
-                 throw new Exception("Not authenticated", 42);   //misery
+                    && !password_verify($pwdtry, $row['password']))) {
+                 throw new Exception("Not authenticated", 42);                  //misery
             }
         } catch(PDOException $e) {
             die($e->getMessage());

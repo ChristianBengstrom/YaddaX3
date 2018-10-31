@@ -58,6 +58,13 @@ class User extends Model {
             $q->bindValue(':lastname', $this->getLastname());
             $q->bindValue(':email', $this->getEmail());
             $q->execute();
+
+            $actionAtrr = 'profile';
+            $action = 'created';
+            $f = array (
+              'actionAtrr' => $actionAtrr,
+              'action' => $action);
+            $view1 = UserUpdateView::createObject($f);
             // $dbh->query('commit');
         } catch(PDOException $e) {
             printf("<p>Insert of user failed: <br/>%s</p>\n",
@@ -105,10 +112,10 @@ class User extends Model {
       $dbh->query('commit');
     }
 
-  public function delete($id) {
+  public function delete() {
     $sql = sprintf("delete from user
                     where id = '%s';"
-                              , $id);
+                              , $this->getUid());
 
     $dbh = Model::connect();
     try {
@@ -146,14 +153,18 @@ class User extends Model {
         }
     }
 
-        public static function createObject($a) {
-          $act = isset($a['activated'])? $a['activated'] : null;
-          $user = new User($_POST['uid'], $_POST['fname'], $_POST['lname'], $_POST['email'], $act);
-          var_dump($user);
-          if (isset($a['pwd1'])) {
-              $user->setPwd($a['pwd1']);
-          }
-          return $user;
-    }
+    public static function createObjectID($a) {
+      $user = new User($_POST['uid']);
 
+      return $user;
+}
+
+      public static function createObject($a) {
+        $act = isset($a['activated'])? $a['activated'] : null;
+        $user = new User($_POST['uid'], $_POST['fname'], $_POST['lname'], $_POST['email'], $act);
+        if (isset($a['pwd1'])) {
+            $user->setPwd($a['pwd1']);
+        }
+        return $user;
   }
+}

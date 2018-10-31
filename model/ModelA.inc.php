@@ -47,5 +47,5 @@ abstract class Model implements ModelIf {
 
     abstract public function create();
     abstract public function update($id, $attr, $newValue);
-    abstract public function delete($id);
+    abstract public function delete();
 }

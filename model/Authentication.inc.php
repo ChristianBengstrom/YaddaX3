@@ -45,8 +45,8 @@ class Authentication extends AuthA {
             $q->execute();
             $row = $q->fetch();
 
-            if (!($row['uid'] === $user
-                    && !password_verify($pwdtry, $row['password']))) {
+            if (!($row['id'] === $user
+                    && password_verify($pwdtry, $row['password']))) {
                  throw new Exception("Not authenticated", 42);                  //misery
             }
         } catch(PDOException $e) {

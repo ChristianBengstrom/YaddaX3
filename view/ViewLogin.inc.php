@@ -48,7 +48,7 @@ class LoginView extends View {
 
     private function registerForm() {                                           // forDEBUG http://x15.dk/hitme.php
         $s = sprintf("
-            <form action='%s?function=U' method='post'>\n
+            <form action='%s?function=T' method='post'>\n
             <div class='gets'>\n
                 <h3>Create User</h3>\n
                 <p>\n

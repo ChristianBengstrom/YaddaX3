@@ -9,10 +9,13 @@
     session_start();
     // Model
     require_once './model/ModelA.inc.php';
+    require_once './model/ModelB.inc.php';
     require_once './model/ModelUser.inc.php';
+    require_once './model/ModelYadda.inc.php';
     // View
     require_once './view/ViewUser.inc.php';
     require_once './view/ViewLogin.inc.php';
+    require_once './view/ViewYadda.inc.php';
     //Controll
     require_once './controller/Controller.inc.php';
 

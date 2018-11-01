@@ -8,7 +8,6 @@
  */
 require_once 'model/DbH.inc.php';
 require_once 'model/ModelIf.inc.php';
-require_once 'model/ModelA.inc.php';
 require_once 'model/Authentication.inc.php';
 
 abstract class Model implements ModelIf {

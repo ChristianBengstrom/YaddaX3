@@ -17,8 +17,9 @@
     require_once './view/ViewLogin.inc.php';
     require_once './view/ViewYadda.inc.php';
     require_once './view/ViewUserUpdated.inc.php';
-    //Controll
+    //Controller
     require_once './controller/Controller.inc.php';
+    //Other Inc's
 
     $controller = new Controller($_GET);
     $controller->doSomething();

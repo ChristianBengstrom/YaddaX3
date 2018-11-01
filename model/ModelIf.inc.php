@@ -8,6 +8,6 @@
  */
 interface ModelIf {
     public function create();
-    public function update($id, $attr, $newValue);
+    public function update();
     public function delete();
 }

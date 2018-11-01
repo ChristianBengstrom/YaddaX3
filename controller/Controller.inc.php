@@ -42,7 +42,7 @@ class Controller {
                 if (isset($_POST['activateGo'])) {
                   $this->makeUserActive();
                 } elseif (isset($_POST['changeGo'])) {
-                  $this->changeUserPwd();
+                  $this->changeUsersPwd();
                 } elseif (isset($_POST['AdminDeleteGo'])) {
                   $this->AdminDeleteUser();
                 }
@@ -54,7 +54,7 @@ class Controller {
                 if (isset($_POST['createGo'])&&($_POST['pwd1']===$_POST['pwd2'])) {
                     $this->createUser($_POST);                                     // activate controller
                 } elseif (isset($_POST['changeGo'])) {
-                  $this->changeUserPwd();
+                  $this->changeUserPwd($_POST);
                 } elseif (isset($_POST['deleteGo'])) {
                   $this->deleteUser($_POST);
                 }
@@ -160,9 +160,10 @@ class Controller {
 
     public function createUser($p) {
         if (isset($p) && count($p) > 0) {
-            $user = User::createObject($p);  // object from array
-            $user->create();         // model method to insert into db
-
+            $user = User::createObject($p);                                     // object from array
+            if ($p['pwd1'] == $p['pwd2']) {
+              $user->create();                                                  // model method to insert into db
+            }
             $p = array();
         }
     }
@@ -173,13 +174,10 @@ class Controller {
             User::ActivateUser($uid, $changeTo);
     }
 
-    public function changeUserPwd() {
-            $id = $_POST['uid'];
-            $attr = "password";
-            if ($_POST['pwd1'] == $_POST['pwd2']) {
-              $newValue = $_POST['pwd1'];
-              User::update($id, $attr, $newValue);
-            //
+    public function changeUserPwd($p) {
+            $user = User::createObject($p,null,null,null,null);
+            if ($p['pwd1'] == $p['pwd2']) {
+              User::update();
             }
     }
     public function deleteUser($p) {

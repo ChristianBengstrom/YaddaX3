@@ -51,8 +51,21 @@ class YaddaView extends View {
           return $y;
    }
 
+   private function sidebar() {
+       $s = sprintf("
+       <aside class='sidebar' style='background-color: #f1f1f1;'>
+         <div class='this_user'>
+           <h3>%s</h3>
+           <img src='getProfileImg.inc.php?uid=%s' width='300' height='200' alt='Kilroy was here'/>
+         </div>
+       </aside>", $_SESSION['uid'], $_SESSION['uid']);
+
+       return $s;
+       }
+
     private function displayLanguage() {
-        $s = sprintf("<main class='main'>\n%s\n%s</main>\n"
+        $s = sprintf("<main class='main'>\n%s\n%s\n%s</main>\n"
+                    , $this->sidebar()
                     , $this->displayManyLanguages()
                     , $this->yaddaForm());
         return $s;

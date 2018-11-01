@@ -78,6 +78,7 @@ class Controller {
                     && isset($p['uid'])
                     && isset($p['pwd'])) {
                         Authentication::authenticate($p['uid'], $p['pwd']);
+                        $_SESSION['uid'] = $p['uid'];
             }
             $p = array();
         }
@@ -182,7 +183,7 @@ class Controller {
             }
     }
     public function deleteUser($p) {
-        $user = User::createObjectID($p);
+        $user = User::createObject($p,null,null,null,null);
         $user->delete();
         // $id = $_POST['id'];
         // User::delete();

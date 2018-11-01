@@ -30,7 +30,6 @@ class User extends Model {
     public function getPwd() {
         return $this->pwd;
     }
-
     public function getUid() {
         return $this->uid;
     }
@@ -43,6 +42,28 @@ class User extends Model {
     public function getEmail() {
         return $this->email;
     }
+    // public static function getProfileImg(){
+    //   $id = $_SESSION['uid'];
+    //
+    //   $sql  = "select img, mimetype";
+    //   $sql .= " from image";
+    //   $sql .= " where uid = '$id'";
+    //   $sql .= " and type = 'ProfileIMG';";
+    //
+    //   $dbh = Model::connect();
+    //
+    //   try {
+    //       $q = $dbh->prepare($sql);
+    //       $q->execute();
+    //       $out = $q->fetch();
+    //   } catch(PDOException $e)  {
+    //       printf("Error getting image.<br/>". $e->getMessage(). '<br/>' . $sql);
+    //       die('');
+    //   }
+    //   $out['img'] = stripslashes($out['img']);                                      // strip slashes that was added when inserting to the database
+    //   header("Content-type: " . $out['mimetype']);
+    //   return $out['img'];
+    // }
 
     public function create() {
     // SQL FIRST INSERT
@@ -173,12 +194,6 @@ class User extends Model {
             return $users;
         }
     }
-
-    public static function createObjectID($a) {
-      $user = new User($_POST['uid'], null);
-
-      return $user;
-}
 
       public static function createObject($a) {
         $act = isset($a['activated'])? $a['activated'] : null;

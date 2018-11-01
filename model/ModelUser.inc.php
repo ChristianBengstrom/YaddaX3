@@ -16,11 +16,11 @@ class User extends Model {
     private $activated;
 
 
-    public function __construct($uid, $activated) {
+    public function __construct($uid,$firstname,$lastname,$email,$activated) {
         $this->uid = $uid;
-        // $this->firstname = $firstname;
-        // $this->lastname = $lastname;
-        // $this->email = $email;
+        $this->firstname = $firstname;
+        $this->lastname = $lastname;
+        $this->email = $email;
         $this->activated = $activated;
     }
 
@@ -45,11 +45,12 @@ class User extends Model {
     }
 
     public function create() {
+    // SQL FIRST INSERT
         $sql = "insert into user (id, password, firstname, lastname, email)
                          values (:uid, :pwd, :firstname, :lastname, :email)";
 
         $dbh = Model::connect();
-        // $dbh->beginTransaction();
+        $dbh->beginTransaction();
         try {
             $q = $dbh->prepare($sql);
             $q->bindValue(':uid', $this->getUid());
@@ -58,19 +59,39 @@ class User extends Model {
             $q->bindValue(':lastname', $this->getLastname());
             $q->bindValue(':email', $this->getEmail());
             $q->execute();
+          } catch(PDOException $e) {
+              printf("<p>Insert of user failed: <br/>%s</p>\n",
+                  $e->getMessage());
+                  $dbh->rollBack();
+          }
 
-            $actionAtrr = 'profile';
-            $action = 'created';
-            $f = array (
-              'actionAtrr' => $actionAtrr,
-              'action' => $action);
-            $view1 = UserUpdateView::createObject($f);
-            // $dbh->query('commit');
+      // SQL SECOND INSERT
+         $image = addslashes(file_get_contents($_FILES['img']['tmp_name']));      // Temporary file name stored on the server +  addslashes
+         $imagetype = $_FILES['img']['type'];
+
+          $sql1 = "insert into image (uid, img, mimetype, type)
+                           values (:uid, :imageitself, :mimetype, :type)";
+
+          try {
+            $q = $dbh->prepare($sql1);
+            $q->bindValue(':uid', $this->getUid());
+            $q->bindValue(':imageitself', $image);
+            $q->bindValue(':mimetype', $imagetype);
+            $q->bindValue(':type', 'ProfileIMG');
+            $q->execute();
         } catch(PDOException $e) {
             printf("<p>Insert of user failed: <br/>%s</p>\n",
                 $e->getMessage());
-                // $dbh->rollBack();
+                $dbh->rollBack();
         }
+        $dbh->query('commit');
+
+        // $actionAtrr = 'profile';
+        // $action = 'created';
+        // $f = array (
+        //   'actionAtrr' => $actionAtrr,
+        //   'action' => $action);
+        // $view1 = UserUpdateView::createObject($f);
 
     }
 

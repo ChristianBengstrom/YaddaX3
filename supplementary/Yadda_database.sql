@@ -88,6 +88,7 @@ CREATE TABLE `image` (
   `id` int(11) NOT NULL,
   `uid` varchar(16) NOT NULL,
   `img` blob NOT NULL,
+  `mimetype` varchar(32) NOT NULL,
   `type` enum('noIMG', 'ProfileIMG','YaddaIMG') NOT NULL default 'noIMG'
 
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

@@ -42,28 +42,28 @@ class User extends Model {
     public function getEmail() {
         return $this->email;
     }
-    // public static function getProfileImg(){
-    //   $id = $_SESSION['uid'];
-    //
-    //   $sql  = "select img, mimetype";
-    //   $sql .= " from image";
-    //   $sql .= " where uid = '$id'";
-    //   $sql .= " and type = 'ProfileIMG';";
-    //
-    //   $dbh = Model::connect();
-    //
-    //   try {
-    //       $q = $dbh->prepare($sql);
-    //       $q->execute();
-    //       $out = $q->fetch();
-    //   } catch(PDOException $e)  {
-    //       printf("Error getting image.<br/>". $e->getMessage(). '<br/>' . $sql);
-    //       die('');
-    //   }
-    //   $out['img'] = stripslashes($out['img']);                                      // strip slashes that was added when inserting to the database
-    //   header("Content-type: " . $out['mimetype']);
-    //   return $out['img'];
-    // }
+    public static function getProfileImg(){
+      $id = $_SESSION['uid'];
+
+      $sql  = "select img, mimetype";
+      $sql .= " from image";
+      $sql .= " where uid = '$id'";
+      $sql .= " and type = 'ProfileIMG';";
+
+      $dbh = Model::connect();
+
+      try {
+          $q = $dbh->prepare($sql);
+          $q->execute();
+          $out = $q->fetch();
+      } catch(PDOException $e)  {
+          printf("Error getting image.<br/>". $e->getMessage(). '<br/>' . $sql);
+          die('');
+      }
+      $out['img'] = stripslashes($out['img']);                                      // strip slashes that was added when inserting to the database
+      header("Content-type: " . $out['mimetype']);
+      return $out['img'];
+    }
 
     public function create() {
     // SQL FIRST INSERT
@@ -116,18 +116,17 @@ class User extends Model {
 
     }
 
-  public function update($id, $attr, $newValue) {
-    $sql = sprintf("update user
-                    set %s = :pwd
-                    where id = '%s';"
-                              , $attr
-                              , $id);
+  public function update() {
+    $sql = "update user
+            set password = :pwd
+            where id = :uid;"
+;
 
     $dbh = Model::connect();
     try {
         $q = $dbh->prepare($sql);
-        $q->bindValue(':pwd', password_hash($newValue, PASSWORD_DEFAULT));
-        $q->bindValue(':pwd', $newValue);
+        $q->bindValue(':pwd', password_hash($this->getPwd(), PASSWORD_DEFAULT));
+        $q->bindValue(':uid', $this->getUid());
         $q->execute();
     } catch(PDOException $e) {
         printf("<p>Update of user failed: <br/>%s</p>\n",
@@ -153,27 +152,40 @@ class User extends Model {
       }
       $dbh->query('commit');
     }
-
-  public function delete() {
+    public function delete() {
     $sql = sprintf("delete from user
                     where id = '%s';"
                               , $this->getUid());
 
+    $sql2 = sprintf("delete from image
+                    where uid = '%s';"
+                              , $this->getUid());
+
     $dbh = Model::connect();
+    $dbh->beginTransaction();
+
+    try {
+        $q = $dbh->prepare($sql2);
+        $q->execute();
+    } catch(PDOException $e) {
+        printf("<p>Delete of user failed: <br/>%s</p>\n",
+            $e->getMessage());
+            $dbh->rollBack();
+    }
     try {
         $q = $dbh->prepare($sql);
         $q->execute();
     } catch(PDOException $e) {
-        printf("<p>Insert of user failed: <br/>%s</p>\n",
+        printf("<p>Delete of image failed: <br/>%s</p>\n",
             $e->getMessage());
+            $dbh->rollBack();
     }
     $dbh->query('commit');
+    Authentication::Logout();
   }
-
     public function __toString() {
         return sprintf("%s%s", $this->uid, $this->activated ? '' : ', not activated');
     }
-
     public static function retrievem() {
         $users = array();
         $dbh = Model::connect();

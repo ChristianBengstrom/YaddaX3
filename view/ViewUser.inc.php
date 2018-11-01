@@ -16,7 +16,7 @@ class UserView extends View {
 
     private function changePwdForm() {
       $s = sprintf("
-          <form action='%s?function=U' method='post'>\n
+          <form action='%s?function=T' method='post'>\n
             <div class='gets'>\n
                 <h3>Change Password</h3>\n
                 <p>\n

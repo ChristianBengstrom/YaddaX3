@@ -9,18 +9,18 @@
 
 require_once 'view/View.inc.php';
 
-class YaddaView extends View {
+class YaddaOneView extends View {
 
     public function __construct($model) {
         parent::__construct($model);
     }
 
-    private function displayAllYaddas() {
-        $yaddas = Yadda::retrievem($this->model->getUid());
+    private function displayOneYadda() {
+        $yaddas = Yadda::retrieve2($this->model->getUid(), $this->model->getDateintime());
         $s = "<div class='haves'>";
         foreach ($yaddas as $yadda) {
-            $s .=  sprintf("Date: %s | User: %s, Content: %s <a href='%s?function=Oneyadda&amp;tid=%s&amp;uid=%s'>Læs mere...</a><br/><br/>\n"
-                , $yadda->getDateintime(), $yadda->getUid(), $yadda->getContent(), $_SERVER['PHP_SELF'], $yadda->getDateintime(), $yadda->getUid()
+            $s .=  sprintf("Date: %s | User: %s, Content: %s<br/><br/>\n"
+                , $yadda->getDateintime(), $yadda->getUid(), $yadda->getContent()
                 );
         }
         $s .= "</div>";
@@ -53,9 +53,9 @@ class YaddaView extends View {
    }
 
     private function displayLanguage() {
-        $s = sprintf("<main class='main'>\n%s\n%s</main>\n"
-                    , $this->displayAllYaddas()
-                    , $this->yaddaForm());
+        $s = sprintf("<main class='main'></br> \n%s</main>\n"
+                    , $this->displayOneYadda()
+                    );
         return $s;
     }
 

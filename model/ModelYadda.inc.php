@@ -74,6 +74,31 @@ class Yadda extends ModelB {
             }
         }
 
+        public static function retrieve2($uid, $tid) {
+          $yaddas = array();
+          $dbh = Model::connect();
+
+          $sql = "select *";
+          $sql .= " from yadda";
+          $sql .= " where uid = :uid";
+          $sql .= " and dateintime = :tid";
+          try {
+             $q = $dbh->prepare($sql);
+             $q->bindValue(':uid', $uid);
+             $q->bindValue(':tid', $tid);
+             $q->execute();
+             while ($row = $q->fetch()) {
+                  $yadda = self::createYaddaObject($row);
+                  array_push($yaddas, $yadda);
+             }
+          } catch(PDOException $e) {
+             printf("<p>Query of users failed: <br/>%s</p>\n",
+                  $e->getMessage());
+          } finally {
+             return $yaddas;
+          }
+     }
+
     public static function createYaddaObject($a) {
         $dateintime = $a['dateintime'];
         $uid = $a['uid'];

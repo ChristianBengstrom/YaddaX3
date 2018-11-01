@@ -68,6 +68,12 @@ class Controller {
                 }
                 $view1->display();
                 break;
+          case 'Oneyadda':   //lang create
+                $this->model = new Yadda($this->qs['tid'], $this->qs['uid'], null); // init a model
+                $view1 = new YaddaOneView($this->model);                     // init a view
+
+                $view1->display();
+            break;
         }
     }
 

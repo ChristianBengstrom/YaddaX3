@@ -88,6 +88,7 @@ CREATE TABLE `image` (
   `id` int(11) NOT NULL,
   `uid` varchar(16) NOT NULL,
   `img` blob NOT NULL,
+  `mimetype` varchar(32) NOT NULL,
   `type` enum('noIMG', 'ProfileIMG','YaddaIMG') NOT NULL default 'noIMG'
 
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -101,7 +102,7 @@ CREATE TABLE `image` (
 CREATE TABLE `imgrelation` (
   `iid` int(11) NOT NULL,
   `uid` varchar(16) NOT NULL,
-  `dateintime` datetime NOT NULL
+  `dateintime` datetime default current_timestamp NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -137,7 +138,7 @@ CREATE TABLE `user` (
 --
 
 CREATE TABLE `yadda` (
-  `dateintime` datetime NOT NULL,
+  `dateintime` datetime default current_timestamp NOT NULL,
   `uid` varchar(16) NOT NULL,
   `content` varchar(167) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -151,8 +152,8 @@ CREATE TABLE `yadda` (
 CREATE TABLE `yaddarelation` (
   `uida` varchar(16) NOT NULL,
   `uidb` varchar(16) NOT NULL,
-  `dateintimea` datetime NOT NULL,
-  `dateintimeb` datetime NOT NULL
+  `dateintimea` datetime default current_timestamp NOT NULL,
+  `dateintimeb` datetime default current_timestamp NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --

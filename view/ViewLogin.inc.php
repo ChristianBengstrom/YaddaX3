@@ -48,32 +48,37 @@ class LoginView extends View {
 
     private function registerForm() {                                           // forDEBUG http://x15.dk/hitme.php
         $s = sprintf("
-            <form action='%s?function=T' method='post'>\n
+            <form action='%s?function=T' method='post' enctype='multipart/form-data'>\n
             <div class='gets'>\n
                 <h3>Create User</h3>\n
                 <p>\n
                     Usename:<br/>
-                    <input type='text' name='uid'/>\n
+                    <input type='text' name='uid' required/>\n
                 </p>\n
                 <p>\n
                     Firstname:<br/>
-                    <input type='text' name='fname'/>\n
+                    <input type='text' name='fname' required/>\n
                 </p>\n
                 <p>\n
                     Lastname:<br/>
-                    <input type='text' name='lname'/>\n
+                    <input type='text' name='lname' required/>\n
                 </p>\n
                 <p>\n
                     Email:<br/>
-                    <input type='text' name='email'/>\n
+                    <input type='text' name='email' required/>\n
+                </p>\n
+                <p>\n
+                    Prifile Image:<br/>
+                    <input type='hidden' name='MAX_FILE_SIZE' value='131072'/> <!-- Remember max file size! -->
+                    <input type='file' id='bild' name='img' required/>
                 </p>\n
                 <p>\n
                     Pwd:<br/>
-                    <input type='password' name='pwd1'/>\n
+                    <input type='password' name='pwd1' required/>\n
                 </p>\n
                  <p>\n
                     Pwd repeat:<br/>
-                    <input type='password' name='pwd2'/>\n
+                    <input type='password' name='pwd2' required/>\n
                 </p>\n
                 <p>\n
                     <input type='submit' name='createGo' value='createGo'/>

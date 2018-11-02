@@ -1,13 +1,15 @@
 <?php
   require_once './model/DbH.inc.php';
   require_once './model/ModelA.inc.php';
+  require_once './model/ModelB.inc.php';
 
   $id = $_GET['uid'];
+  $type = $_GET['type'];
 
   $sql  = "select img, mimetype";
   $sql .= " from image";
   $sql .= " where uid = '$id'";
-  $sql .= " and type = 'ProfileIMG';";
+  $sql .= " and type = '$type';";
 
   $dbh = Model::connect();
 

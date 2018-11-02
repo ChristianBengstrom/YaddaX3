@@ -42,6 +42,7 @@ class User extends Model {
     public function getEmail() {
         return $this->email;
     }
+
     public static function getProfileImg(){
       $id = $_SESSION['uid'];
 
@@ -186,11 +187,12 @@ class User extends Model {
     public function __toString() {
         return sprintf("%s%s", $this->uid, $this->activated ? '' : ', not activated');
     }
+
     public static function retrievem() {
         $users = array();
         $dbh = Model::connect();
 
-        $sql = "select *";
+        $sql = "select id, firstname, lastname, email, activated";
         $sql .= " from user";
         try {
             $q = $dbh->prepare($sql);
@@ -207,12 +209,19 @@ class User extends Model {
         }
     }
 
-      public static function createObject($a) {
-        $act = isset($a['activated'])? $a['activated'] : null;
-        $user = new User($_POST['uid'], $_POST['fname'], $_POST['lname'], $_POST['email'], $act);
-        if (isset($a['pwd1'])) {
-            $user->setPwd($a['pwd1']);
-        }
-        return $user;
-  }
+
+    public static function createObject($a) {
+      $act = isset($a['activated']) ? $a['activated'] : null;
+      // if ($a['activated'] == 1) {
+      //   $act = 'Active';
+      // } else if ($a['activated'] == 1 || $a['activated'] == null) {
+      //   $act = 'Deactve';
+      // }
+      $user = new User($a['id'], $a['fname'], $a['lname'], $a['email'], $act);
+      if (isset($a['pwd1'])) {
+          $user->setPwd($a['pwd1']);
+      }
+      return $user;
+    }
+
 }

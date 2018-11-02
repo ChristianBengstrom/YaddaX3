@@ -43,8 +43,8 @@ abstract class View {
                 <li><a href='%s'>Home</a></li>\n",
                 $_SERVER['PHP_SELF']);
         if (Authentication::isAuthenticated()) {
-            $s .= sprintf("               <li><a href='%s?function=U'>Profile settings</a></li>\n
-                                          <li><a href='%s?function=Yadda'>Yadda</a></li>\n"
+            $s .= sprintf("               <li><a href='%s?function=S'>Settings</a></li>\n
+                                          <li><a href='%s?function=Yadda'>Timeline</a></li>\n"
                 , $_SERVER['PHP_SELF'], $_SERVER['PHP_SELF']);
         }
 
@@ -52,7 +52,7 @@ abstract class View {
             $s .= sprintf("                <li><a href='%s?function=A'>Login</a></li>\n"
                     , $_SERVER['PHP_SELF']);
         } else {
-            $s .= sprintf("                <li><a href='%s?function=U'>User</a></li>
+            $s .= sprintf("                <li><a href='%s?function=U'>Admin</a></li>
                                            <li><a href='%s?function=Z'>Logout</a></li>\n"
                                             , $_SERVER['PHP_SELF'], $_SERVER['PHP_SELF']);
         }

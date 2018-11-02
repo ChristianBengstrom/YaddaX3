@@ -38,25 +38,21 @@ class Controller {
                 break;
             case 'U':   //user create
                 $this->model = new User(null, null, null, null, null); // init a model
-                $view1 = new UserView($this->model);                  // init a view
+                $view1 = new AdminView($this->model);                  // init a view
                 if (isset($_POST['activateGo'])) {
-                  $this->makeUserActive();
+                  $this->makeUserActive($_POST);
                 } elseif (isset($_POST['changeGo'])) {
-                  $this->changeUsersPwd();
+                  $this->adminChangeUserPwd($_POST);
                 } elseif (isset($_POST['AdminDeleteGo'])) {
-                  $this->AdminDeleteUser();
+                  $this->AdminDeleteUser($_POST);
                 }
                 $view1->display();
                 break;
-            case 'T':   //user create
-                $this->model = new User(null, null, null, null, null); // init a model
+            case 'T':   //Create User
+                $this->model = new User(null, null, null, null, null);          // init a model
                 $view1 = new UserUpdateView(null, null);                           // init a view
                 if (isset($_POST['createGo'])&&($_POST['pwd1']===$_POST['pwd2'])) {
-                    $this->createUser($_POST);                                     // activate controller
-                } elseif (isset($_POST['changeGo'])) {
-                  $this->changeUserPwd($_POST);
-                } elseif (isset($_POST['deleteGo'])) {
-                  $this->deleteUser($_POST);
+                  $this->createUser($_POST);                                     // activate controller
                 }
                 $view1->display();
                 break;
@@ -74,6 +70,16 @@ class Controller {
 
                 $view1->display();
             break;
+            case 'S':   //User Settings
+                $this->model = new User(null, null, null, null, null);          // init a model
+                $view1 = new UserView(null, null);                              // init a view
+                if (isset($_POST['changeGo'])) {
+                  $this->changeUserPwd($_POST);
+                } elseif (isset($_POST['deleteGo'])) {
+                  $this->deleteUser($_POST);
+                }
+                $view1->display();
+                break;
         }
     }
 
@@ -93,76 +99,10 @@ class Controller {
     public function createYadda($p) {
         if (isset($p) && count($p) > 0) {
             $yaddas = Yadda::createYaddaObject($p);  // object from array
-            $yaddas->createYadda();         // model method to insert into db
+            $yaddas->createYadda($_POST);         // model method to insert into db
             $p = array();
         }
     }
-    //
-    // public function createCountry($p) {
-    //     if (isset($p) && count($p) > 0) {
-    //         $p['code'] = $_POST['code']; // augment array with dummy
-    //         $country = Country::createObject($p);  // object from array
-    //         $country->create();         // model method to insert into db
-    //         $p = array();
-    //     }
-    // }
-    // public function updateCountry($p) {
-    //   if (isset($p) && count($p) > 0) {
-    //       $p['code'] = $_POST['code'];                          // augment array with dummy
-    //       $country = Country::createObject($p);           // object from array
-    //       // $id = $_POST['id'];
-    //       $country->update($p, null, null);           // model method to insert into db
-    //       $p = array();
-    //   }
-    // }
-    // public function deleteCountry($p) {
-    //       $id = $_POST['code'];
-    //       country::delete($id);
-    // }
-    // public function createCity($p) {
-    //     if (isset($p) && count($p) > 0) {
-    //         $p['id'] = null; // augment array with dummy
-    //         $city = City::createObject($p);  // object from array
-    //         $city->create();         // model method to insert into db
-    //         $p = array();
-    //     }
-    // }
-    // public function updateCity($p) {
-    //   if (isset($p) && count($p) > 0) {
-    //       $p['id'] = null;                          // augment array with dummy
-    //       $city = City::createObject($p);           // object from array
-    //       $id = $_POST['id'];
-    //       $city->update($id, null, null);           // model method to insert into db
-    //       $p = array();
-    //   }
-    // }
-    // public function deleteCity($p) {
-    //       $id = $_POST['id'];
-    //       city::delete($id);
-    // }
-    // public function createLanguage($p) {
-    //     if (isset($p) && count($p) > 0) {
-    //         $language = CountryLanguage::createObject($p);  // object from array
-    //         $language->create();         // model method to insert into db
-    //         $p = array();
-    //     }
-    // }
-    // public function updateLanguage($p) {
-    //     if (isset($p) && count($p) > 0) {
-    //         $p['countrycode'] = $_POST['countrycode'];
-    //         $p['language'] = $_POST['language'];                     // augment array with dummy
-    //         $language = CountryLanguage::createObject($p);  // object from array
-    //         $language->update(null, null, null);           // model method to insert into db
-    //         $p = array();
-    //     }
-    // }
-    // public function deleteLanguage($p) {
-    //       $p['countrycode'] = $_POST['countrycode'];
-    //       $p['language'] = $_POST['language'];                     // augment array with dummy
-    //       $language = CountryLanguage::createObject($p);
-    //       // $id = $_POST['countrycode'];
-    //       $language->delete(null);
-    // }
 
     public function createUser($p) {
         if (isset($p) && count($p) > 0) {
@@ -189,8 +129,13 @@ class Controller {
     public function deleteUser($p) {
         $user = User::createObject($p,null,null,null,null);
         $user->delete();
-        // $id = $_POST['id'];
-        // User::delete();
+    }
+
+    public function adminChangeUserPwd($p) {
+        $user = User::createObject($p,null,null,null,null);
+        if ($p['pwd1'] == $p['pwd2']) {
+          User::update();
+        }
     }
 
     public function logout() {

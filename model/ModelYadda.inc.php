@@ -33,21 +33,87 @@ class Yadda extends ModelB {
         return $this->content;
     }
 
+    // public function hasImage() {
+    //       $sql = "select *";
+    //       $sql .= " from yadda";
+    //       try {
+    //           $q = $dbh->prepare($sql);
+    //           $q->execute();
+    //           while ($row = $q->fetch()) {
+    //               $yadda = self::createYaddaObject($row);
+    //               array_push($yaddas, $yadda);
+    //           }
+    //       } catch(PDOException $e) {
+    //           printf("<p>Query of users failed: <br/>%s</p>\n",
+    //               $e->getMessage());
+    //       } finally {
+    //           return $yaddas;
+    //       }
+    // }
+
     public function createYadda() {
-        $sql = sprintf("insert into yadda (uid, content)
-                        values ('%s', '%s')"
-                              , $this->getUid()
-                              , $this->getContent());
+      $sql1succes = 1; $sql2succes = 1; $sql3succes = 1;
+
+      // SQL FIRST INSERT
+        $sql1 = "insert into yadda (uid, content)
+                        values (:uid, :content)";
 
         $dbh = Model::connect();
+        $dbh->beginTransaction();
         try {
-            $q = $dbh->prepare($sql);
+            $q = $dbh->prepare($sql1);
+            $q->bindValue(':uid', $this->getUid());
+            $q->bindValue(':content', $this->getContent());
             $q->execute();
         } catch(PDOException $e) {
-            printf("<p>Insert failed: <br/>%s</p>\n",
+            printf("<p>Insert failed1: <br/>%s</p>\n",
                 $e->getMessage());
+                $sql1succes = 0;
         }
-        $dbh->query('commit');
+
+        if (isset($_FILES['img']) && count($_FILES['img']) > 0) {
+          // SQL SECOND INSERT
+          $image = addslashes(file_get_contents($_FILES['img']['tmp_name']));      // Temporary file name stored on the server +  addslashes
+          $imagetype = $_FILES['img']['type'];
+
+           $sql2 = "insert into image (uid, img, mimetype, type)
+                            values (:uid, :imageitself, :mimetype, :type)";
+
+           try {
+             $q = $dbh->prepare($sql2);
+             $q->bindValue(':uid', $this->getUid());
+             $q->bindValue(':imageitself', $image);
+             $q->bindValue(':mimetype', $imagetype);
+             $q->bindValue(':type', 'YaddaIMG');
+             $q->execute();
+             $lastiid = $dbh->lastInsertId().'<br />';
+           } catch(PDOException $e) {
+               printf("<p>Insert2 of user failed: <br/>%s</p>\n",
+                   $e->getMessage());
+                   $sql2succes = 0;
+           }
+         }
+         // SQL THIRD INSERT
+         $sql3 = "insert into imgrelation (iid, uid)
+                  values (:iid, :uid)";
+
+          try {
+            $q = $dbh->prepare($sql3);
+            $q->bindValue(':iid', $lastiid);
+            $q->bindValue(':uid', $this->getUid());
+            $q->execute();
+          } catch(PDOException $e) {
+              printf("<p>Insert3 of user failed: <br/>%s</p>\n",
+                  $e->getMessage());
+                  $sql3succes = 0;
+          }
+
+          if ($sql1succes == 1 && $sql2succes == 1 && $sql3succes == 1) {
+            $dbh->query('commit');
+          } else {
+            $dbh->rollBack();
+            echo "Error" . $sql3succes.$sql3succes.$sql3succes;
+          }
     }
 
     public function update($uid, $content) {}     // required by ModelB

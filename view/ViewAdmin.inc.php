@@ -18,44 +18,13 @@ class AdminView extends View {
         $users = User::retrievem();
         $s = "<div class='haves'>";
         foreach ($users as $user) {
-            $s .=  sprintf("%s<br/>\n"
+            $s .=  sprintf("%s<br/><br/>\n"
                 , $user);
         }
         $s .= "</div>";
         return $s;
     }
 
-    // private function userForm() {
-    //     $s = sprintf("
-    //         <form action='%s?function=U' method='post'>\n
-    //         <div class='gets'>\n
-    //             <h3>Create User</h3>\n
-    //             <p>\n
-    //                 Userid:<br/>
-    //                 <input type='text' name='uid'/>\n
-    //             </p>\n
-    //             <p>\n
-    //                 Pwd:<br/>
-    //                 <input type='password' name='pwd1'/>\n
-    //             </p>\n
-    //              <p>\n
-    //                 Pwd repeat:<br/>
-    //                 <input type='password' name='pwd2'/>\n
-    //             </p>\n
-    //             <p>\n
-    //                 <input type='submit' name='createGo' value='createGo'/>
-    //             </p>
-    //         </div>", $_SERVER['PHP_SELF']);
-    //
-    //     if (!Model::areCookiesEnabled()) {
-    //         $s .= "<tr><td colspan='2' class='err'>Cookies
-    //         from this domain must be
-    //                   enabled before attempting login.</td></tr>";
-    //     }
-    //     $s .= "          </div>\n";
-    //     $s .= "          </form>\n";
-    //     return $s;
-    // }
     private function activateUserForm() {
         $s = sprintf(" <form action='%s?function=U' method='post'>\n
                           <div class='gets'>\n"
@@ -91,11 +60,22 @@ class AdminView extends View {
       $s = sprintf("
           <form action='%s?function=U' method='post'>\n
             <div class='gets'>\n
-                <h3>Change Password</h3>\n
-                <p>\n
-                    Userid:<br/>
-                    <input type='text' name='uid' value='%s'required readonly/>\n
-                </p>\n
+                <h3>Change Password</h3>\n", $_SERVER['PHP_SELF']);
+
+                $users = User::retrievem();
+                $s .= "           <select name='uid'>\n";
+
+                foreach ($users as $user) {
+                    $t = (explode(",", $user));
+                    unset($t[1]);
+                    $t = implode(" ",$t);
+                    $s .=  sprintf("  <option value='%s'>%s</option>\n"
+                        , $t
+                        , $t);
+                }
+                $s .= "           </select>\n";
+
+        $s .= sprintf("
                 <p>\n
                     New Password:<br/>
                     <input type='password' name='pwd1'/>\n
@@ -108,7 +88,7 @@ class AdminView extends View {
                     <input type='submit' name='changeGo' value='changeGo'/>\n
                 </p>\n
             </div>
-          </form>", $_SERVER['PHP_SELF'], Authentication::getLoginId());
+          </form>", Authentication::getLoginId());
 
       return $s;
     }

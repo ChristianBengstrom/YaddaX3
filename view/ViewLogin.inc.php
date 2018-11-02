@@ -69,7 +69,7 @@ class LoginView extends View {
                 </p>\n
                 <p>\n
                     Prifile Image:<br/>
-                    <input type='hidden' name='MAX_FILE_SIZE' value='131072'/> <!-- Remember max file size! -->
+                    <input type='hidden' name='MAX_FILE_SIZE' value='131072'/>  <!-- Remember max file size! -->
                     <input type='file' id='bild' name='img' required/>
                 </p>\n
                 <p>\n

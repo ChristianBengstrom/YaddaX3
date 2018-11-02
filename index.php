@@ -14,6 +14,7 @@
     require_once './model/ModelYadda.inc.php';
     // View
     require_once './view/ViewUser.inc.php';
+    require_once './view/ViewAdmin.inc.php';
     require_once './view/ViewLogin.inc.php';
     require_once './view/ViewYadda.inc.php';
     require_once './view/ViewOneYadda.inc.php';

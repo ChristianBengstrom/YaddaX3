@@ -13,7 +13,7 @@ class UserView extends View {
     public function __construct($model) {
         parent::__construct($model);
     }
-
+    
     private function changePwdForm() {
       $s = sprintf("
           <form action='%s?function=T' method='post'>\n

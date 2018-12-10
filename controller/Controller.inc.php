@@ -71,7 +71,9 @@ class Controller {
           case 'Oneyadda':   //lang create
                 $this->model = new Yadda($this->qs['tid'], $this->qs['uid'], null); // init a model
                 $view1 = new YaddaOneView($this->model);                     // init a view
-
+                if (isset($_POST)) {
+                    $this->createYaddaRel($_POST);                  // activate controller
+                }
                 $view1->display();
             break;
         }
@@ -91,6 +93,13 @@ class Controller {
     }
 
     public function createYadda($p) {
+        if (isset($p) && count($p) > 0) {
+            $yaddas = Yadda::createYaddaObject($p);  // object from array
+            $yaddas->createYadda();         // model method to insert into db
+            $p = array();
+        }
+    }
+    public function createYaddaRel($p) {
         if (isset($p) && count($p) > 0) {
             $yaddas = Yadda::createYaddaObject($p);  // object from array
             $yaddas->createYadda();         // model method to insert into db

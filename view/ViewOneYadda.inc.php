@@ -27,19 +27,25 @@ class YaddaOneView extends View {
         return $s;
     }
 
-    private function yaddaForm() {
+    private function yaddaFormOne() {
           $y = sprintf(
                 "
-                <form action='%s?function=Yadda' method='post' id='yaddaform'> \n
+                <form action='%s?function=Oneyadda' method='post' id='yaddaform'> \n
                   <div class='gets'>\n
                         <p>
-                              User<br/>
+                              User:
                               <input type='text' name='uid'
                               value='%s'
                               required readonly/>
                         </p>\n
                         <p>
-                              Yadda: <br/>
+                        <p>
+                              To User:
+                              <input type='text' name='uid'
+                              value='%s'
+                              required readonly/>
+                        </p>\n
+                              Yadda reply: <br/>
                               <textarea name='content' form='yaddaform' rows='4' cols='50'></textarea>
                         </p>
                         <p><input type='submit' value='Go!'/></p>\n
@@ -47,19 +53,20 @@ class YaddaOneView extends View {
                 \n"
                 , $_SERVER['PHP_SELF']
                 , Authentication::getLoginId()
+                , $this->model->getUid()
           );
 
           return $y;
    }
 
-    private function displayLanguage() {
-        $s = sprintf("<main class='main'></br> \n%s</main>\n"
+    private function displayYaddaOne() {
+        $s = sprintf("<main class='main'></br> \n%s \n%s</main>\n"
                     , $this->displayOneYadda()
-                    );
+                    , $this->yaddaFormOne());
         return $s;
     }
 
     public function display(){
-       $this->output($this->displayLanguage());
+       $this->output($this->displayYaddaOne());
     }
 }

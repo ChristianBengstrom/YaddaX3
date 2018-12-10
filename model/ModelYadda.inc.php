@@ -50,6 +50,25 @@ class Yadda extends ModelB {
         $dbh->query('commit');
     }
 
+    public function createYaddaRel($uid, $dateintime) {
+        $sql = sprintf("insert into yadda (uid, content)
+                        values ('%s', '%s') where uid = :uid and datetime = :tid"
+                              , $this->getUid()
+                              , $this->getContent());
+
+        $dbh = Model::connect();
+        try {
+            $q = $dbh->prepare($sql);
+            $q->bindValue(':uid', $uid);
+            $q->bindValue(':tid', $dateintime);
+            $q->execute();
+        } catch(PDOException $e) {
+            printf("<p>Insert failed: <br/>%s</p>\n",
+                $e->getMessage());
+        }
+        $dbh->query('commit');
+    }
+
     public function update($uid, $content) {}     // required by ModelB
     public function delete($dateintime) {}     // required by ModelB
 

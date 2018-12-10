@@ -64,15 +64,15 @@ class YaddaView extends View {
        return $s;
        }
 
-    private function displayLanguage() {
-        $s = sprintf("<main class='main'>\n%s\n%s</main>\n"
+    private function displayYaddas() {
+        $s = sprintf("<main class='main'>\n%s\n%s\n%s</main>\n"
                      , $this->sidebar()
                      , $this->displayAllYaddas()
-                    , $this->yaddaForm());
+                     , $this->yaddaForm());
         return $s;
     }
 
     public function display(){
-       $this->output($this->displayLanguage());
+       $this->output($this->displayYaddas());
     }
 }

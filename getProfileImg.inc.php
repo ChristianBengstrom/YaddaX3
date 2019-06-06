@@ -24,5 +24,5 @@
   $out['img'] = stripslashes($out['img']);                                      // strip slashes that was added when inserting to the database
   header("Content-type: " . $out['mimetype']);
   echo $out['img'];
-
+  // test
 ?>
